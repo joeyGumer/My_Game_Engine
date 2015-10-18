@@ -20,7 +20,7 @@ j1Render::~j1Render()
 {}
 
 // Called before render is available
-bool j1Render::Awake()
+bool j1Render::Awake(pugi::xml_node& node)
 {
 	LOG("Create SDL rendering context");
 	bool ret = true;
@@ -85,6 +85,7 @@ bool j1Render::CleanUp()
 	SDL_DestroyRenderer(renderer);
 	return true;
 }
+
 
 void j1Render::SetBackgroundColor(SDL_Color color)
 {
@@ -223,4 +224,27 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 	}
 
 	return ret;
+}
+
+//---------------------------------------
+/*
+// Load and save for this module
+*/
+
+bool j1Render::Load(pugi::xml_node& node)
+{
+	camera.x = node.child("camera").attribute("x").as_int();
+	camera.y = node.child("camera").attribute("y").as_int();
+
+	return true;
+}
+
+bool j1Render::Save(pugi::xml_node& node)const
+{
+	pugi::xml_node cam = node.append_child("camera");
+
+	cam.append_attribute("x") = camera.x;
+	cam.append_attribute("y") = camera.y;
+
+	return true;
 }

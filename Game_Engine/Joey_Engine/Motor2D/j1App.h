@@ -4,6 +4,7 @@
 #include "p2List.h"
 #include "j1Module.h"
 
+
 // Modules
 
 class j1Window;
@@ -39,11 +40,21 @@ public:
 	// Add a new module to handle
 	void AddModule(j1Module* module);
 
+	//Getters from properties to read from other classes
+	const char* GetTitle() const;
+	const char* GetCreator() const;
 	int GetArgc() const;
 	const char* GetArgv(int index) const;
 
+	//Load and Save
+	void LoadGame(const char* file);
+	void SaveGame(const char* file) const;
+
 private:
 
+	/*
+	//Framing updating functions
+	*/
 	// Call modules before each loop iteration
 	void PrepareUpdate();
 
@@ -58,6 +69,14 @@ private:
 
 	// Call modules after each loop iteration
 	bool PostUpdate();
+	//--------------------------
+
+	//Loads configuration xml file
+	pugi::xml_node LoadConfig();
+
+	//Load and save state functions
+	bool LoadGameNow();
+	bool SaveGameNow() const;
 
 public:
 
@@ -75,10 +94,21 @@ public:
 	j1FileSystem*		fs;
 
 private:
+	
+	pugi::xml_document  config_file;
+	pugi::xml_node	    config;
+
+	p2SString			title;
+	p2SString			creator;
 
 	p2List<j1Module*>	modules;
 	int					argc;
 	char**				args;
+
+	mutable bool		want_to_save;
+	bool				want_to_load;
+	p2SString			load_game;
+	mutable p2SString	save_game;
 };
 
 extern j1App* App;

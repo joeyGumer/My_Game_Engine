@@ -1,18 +1,21 @@
 #include "j1FileSystem.h"
+#include "j1App.h"
 #include "p2Log.h"
 #include "PhysFS/include/physfs.h"
 #include "SDL/include/SDL.h"
 
 #pragma comment( lib, "PhysFS/libx86/physfs.lib" )
 
-j1FileSystem::j1FileSystem(const char* game_path) : j1Module()
+j1FileSystem::j1FileSystem() : j1Module()
 {
 	name.create("filesystem");
 	
-	if (PHYSFS_init(NULL) == 0)
+	char* base_path = SDL_GetBasePath();
+	if (PHYSFS_init(base_path) == 0)
 		LOG("Failed to initialize File System : %s", PHYSFS_getLastError());
-
-	AddPath(game_path);
+	
+	AddPath(".");
+	
 }
 
 j1FileSystem::~j1FileSystem()
@@ -20,9 +23,28 @@ j1FileSystem::~j1FileSystem()
 	PHYSFS_deinit();
 }
 
-bool j1FileSystem::Awake()
+bool j1FileSystem::Awake(pugi::xml_node& node)
 {
 	LOG("Loading File System");
+
+	for (pugi::xml_node path = node.child("path"); path; path = path.next_sibling("path"))
+	{
+		AddPath(path.attribute("file").as_string());
+	}
+
+	// Ask SDL for a write dir
+	char* write_path = SDL_GetPrefPath(App->GetCreator(), App->GetTitle());
+
+	if (PHYSFS_setWriteDir(write_path) == 0)
+		LOG("File System error while creating write dir: %s\n", PHYSFS_getLastError());
+	else
+	{
+		// We add the writing directory as a reading directory too with speacial mount point
+		LOG("Writing directory is %s\n", write_path);
+		AddPath(write_path, GetSaveDirectory());
+	}
+
+	SDL_free(write_path);
 
 	return true;
 }
@@ -34,11 +56,11 @@ bool j1FileSystem::CleanUp()
 	return true;
 }
 
-bool j1FileSystem::AddPath(const char* path)
+bool j1FileSystem::AddPath(const char* path, const char* mount_point)
 {
 	bool ret = false;
 
-	if (PHYSFS_mount(path, NULL, 1) != 0)
+	if (PHYSFS_mount(path,mount_point , 1) != 0)
 	{
 		LOG("Added path %s to file System", path);
 		ret = true;
@@ -110,4 +132,27 @@ int close_sdl_rwops(SDL_RWops *rw)
 	RELEASE(rw->hidden.mem.base);
 	SDL_FreeRW(rw);
 	return 0;
+}
+
+int j1FileSystem::SaveFile(const char* file, const char* buffer, int size) const
+{
+	int ret = 0;
+
+	PHYSFS_file* fs_file = PHYSFS_openWrite(file);
+
+	if (fs_file != NULL)
+	{
+		PHYSFS_sint64 written = PHYSFS_write(fs_file, (const void*)buffer, 1, size);
+		if (written != size)
+			LOG("File System error while writing to file %s: %s\n", file, PHYSFS_getLastError());
+		else
+			ret = (uint)written;
+
+		if (PHYSFS_close(fs_file) == 0)
+			LOG("File System error while closing file %s: %s\n", file, PHYSFS_getLastError());
+	}
+	else
+		LOG("File System error while opening file %s: %s\n", file, PHYSFS_getLastError());
+
+	return ret;
 }

@@ -31,6 +31,9 @@
     <ClCompile Include="j1FileSystem.cpp">
       <Filter>Desenvolupament  ========\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="PugiXml\src\pugixml.cpp">
+      <Filter>Desenvolupament  ========\Tools\PugiXml</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -78,6 +81,12 @@
     <ClInclude Include="j1FileSystem.h">
       <Filter>Desenvolupament  ========\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="PugiXml\src\pugiconfig.hpp">
+      <Filter>Desenvolupament  ========\Tools\PugiXml</Filter>
+    </ClInclude>
+    <ClInclude Include="PugiXml\src\pugixml.hpp">
+      <Filter>Desenvolupament  ========\Tools\PugiXml</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Programacio 2 ===========">
@@ -95,5 +104,16 @@
     <Filter Include="Desenvolupament  ========\Modules">
       <UniqueIdentifier>{244722d1-90ce-423d-8e7a-556211865a32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Desenvolupament  ========\Tools\PugiXml">
+      <UniqueIdentifier>{95067833-8e85-4258-bbb7-05c51970ba4b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="config.xml">
+      <Filter>Desenvolupament  ========\Tools</Filter>
+    </Xml>
+    <Xml Include="state.xml">
+      <Filter>Desenvolupament  ========\Tools</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

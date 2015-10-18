@@ -16,7 +16,7 @@ public:
 	virtual ~j1Window();
 
 	// Called before render is available
-	bool Awake();
+	bool Awake(pugi::xml_node& node);
 
 	// Called before quitting
 	bool CleanUp();
@@ -38,7 +38,6 @@ public:
 	SDL_Surface* screen_surface;
 
 private:
-	p2SString	title;
 	uint		width;
 	uint		height;
 	uint		scale;

@@ -60,6 +60,7 @@ inline const char* const PATH(const char* folder, const char* file)
 }
 
 // COnf
+/*
 #define R_FULLSCREEN false
 #define R_BORDERLESS false
 #define R_RESIZABLE false
@@ -68,5 +69,5 @@ inline const char* const PATH(const char* folder, const char* file)
 #define SCREEN_HEIGHT 480
 #define WINDOW_TITLE "My Game"
 #define SCALE 1
-
+*/
 #endif

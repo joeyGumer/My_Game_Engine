@@ -1,0 +1,30 @@
+<!-- Config file for the game -->
+
+<config>
+  
+  <app>
+    <title>Joey's game engine testbed</title>
+    <creator>Joey</creator>
+  </app>
+  
+  <window>
+    <resolution width ="640" height ="480" scale="1"/>
+    <fullscreen value ="false"/>
+    <borderless value ="false"/>
+    <resizable value ="false"/>
+    <fullscreen_window value ="false"/>
+  </window>
+  
+  <renderer></renderer>
+  
+  <filesystem>
+    <path file ="data.zip"/> 
+  </filesystem>
+  
+  <textures></textures>
+  
+  <audio></audio>
+  
+  <input></input>
+  
+</config>
