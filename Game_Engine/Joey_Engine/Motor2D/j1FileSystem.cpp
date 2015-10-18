@@ -95,10 +95,10 @@ int j1FileSystem::LoadFile(const char* path, char** buffer)
 		}
 
 		if (PHYSFS_close(file) == 0)
-			LOG("FileS System error while trying to close %s : %s", path, PHYSFS_getLastError());
+			LOG("File System error while trying to close %s : %s", path, PHYSFS_getLastError());
 	}
 	else
-		LOG("FileS System error while trying to open %s : %s", path, PHYSFS_getLastError());
+		LOG("File System error while trying to open %s : %s", path, PHYSFS_getLastError());
 
 	return ret;
 }

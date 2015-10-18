@@ -6,7 +6,9 @@
 #include "j1Audio.h"
 #include "j1Render.h"
 #include "j1Window.h"
+#include "j1Map.h"
 #include "j1Scene.h"
+
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -29,9 +31,11 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
-	img = App->tex->Load("textures/test.png");
-	App->audio->PlayMusic("audio/music/My_time_is_now.ogg");
 	//App->audio->PlayMusic("audio/music/music_sadpiano.ogg");
+	//img = App->tex->Load("textures/test.png");
+	App->audio->PlayMusic("audio/music/My_time_is_now.ogg");
+	App->map->Load();
+	
 	return true;
 }
 
@@ -45,25 +49,36 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
+	//Load and Save
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		App->LoadGame("state.xml");
 
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
-		App->SaveGame("state.xml");
+		App->SaveGame("st ate.xml");
 
+	//Camera movement
+	//My code is much more slow, so I increased the velocity of the camera
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->render->camera.y += 1;
+		App->render->camera.y += 2;
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->render->camera.y -= 1;
+		App->render->camera.y -= 2;
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->render->camera.x += 1;
+		App->render->camera.x += 2;
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->render->camera.x -= 1;
+		App->render->camera.x -= 2;
 
-	App->render->Blit(img, 0, 0);
+	//Volume Control
+	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_REPEAT)
+		App->audio->DecreaseVolume();
+
+	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT)
+		App->audio->IncreaseVolume();
+
+	App->map->Draw();
+	
 	return true;
 }
 
@@ -74,7 +89,7 @@ bool j1Scene::PostUpdate()
 
 	if(App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
-
+	   
 	return ret;
 }
 

@@ -23,8 +23,15 @@
   
   <textures></textures>
   
-  <audio></audio>
+  <audio>
+    <volume value = "128"/>
+  </audio>
   
   <input></input>
+
+  <map>
+    <folder>maps/</folder>
+    <data file= "skull.tmx"/>
+  </map>
   
 </config>
